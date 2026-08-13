@@ -39,7 +39,8 @@ export function usePlayerEngine() {
   // advancing from track 0). Routing the call through a ref that's
   // reassigned every render keeps the handlers pointed at the latest
   // version without needing to recreate the player.
-  const goRelativeRef = useRef<(delta: 1 | -1, autoplay: boolean) => void>(() => {});
+const goNextRef = useRef<(autoplay: boolean) => void>(() => {});
+const historyRef = useRef<number[]>([]);
 
   const playlist = PLAYLISTS[playlistIndex] ?? PLAYLISTS[0];
   const track = playlist.tracks[trackIndex] ?? playlist.tracks[0];
@@ -87,22 +88,23 @@ export function usePlayerEngine() {
             else if (event.data === YTns.PlayerState.CUED) setPlaybackState("cued");
             else if (event.data === YTns.PlayerState.ENDED) {
               setPlaybackState("ended");
-              goRelativeRef.current(1, true);
+              goNextRef.current(true);
             }
           },
           onError: (event) => {
-            console.log("YOUTUBE ERROR CODE:", event.data);
-            // Video got pulled, region-blocked, or embedding was disabled
-            // after we shipped. Skip forward and log it — never leave the
-            // listener stuck on a dead track.
-            import("@vercel/analytics").then(({ track: sendEvent }) => {
-              sendEvent("youtube_playback_error", {
-                code: event.data,
-                videoId: trackRef.current.videoId,
-              });
-            });
-            goRelativeRef.current(1, true);
-          },
+          const meanings: Record<number, string> = {
+            2: "invalid video id",
+            5: "player/HTML5 error",
+            100: "video not found, removed, or private",
+            101: "embedding disabled by the video owner",
+            150: "embedding disabled by the video owner",
+          };
+          console.error(`[YouTube] ${trackRef.current.videoId} failed (code ${event.data}: ${meanings[event.data] ?? "unknown"})`);
+          import("@vercel/analytics").then(({ track: sendEvent }) => {
+            sendEvent("youtube_playback_error", { code: event.data, videoId: trackRef.current.videoId });
+          });
+          goNextRef.current(true);
+        },
         },
       });
     }
@@ -162,16 +164,37 @@ export function usePlayerEngine() {
     }
   }, []);
 
-  const goRelative = useCallback(
-    (delta: 1 | -1, autoplay: boolean) => {
+  const goNext = useCallback(
+    (autoplay: boolean) => {
       const tracks = playlist.tracks;
-      const nextIndex = (trackIndex + delta + tracks.length) % tracks.length;
+      historyRef.current.push(trackIndex);
+      if (historyRef.current.length > 100) historyRef.current.shift();
+
+      let nextIndex = trackIndex;
+      if (tracks.length > 1) {
+        do {
+          nextIndex = Math.floor(Math.random() * tracks.length);
+        } while (nextIndex === trackIndex);
+      }
       setTrackIndex(nextIndex);
       loadTrack(tracks[nextIndex], autoplay && hasEverPlayedRef.current);
     },
     [playlist, trackIndex, loadTrack]
   );
-  goRelativeRef.current = goRelative;
+  goNextRef.current = goNext;
+
+  const goPrev = useCallback(() => {
+    const tracks = playlist.tracks;
+    const previousIndex = historyRef.current.pop();
+    if (previousIndex !== undefined && previousIndex < tracks.length) {
+      setTrackIndex(previousIndex);
+      loadTrack(tracks[previousIndex], hasEverPlayedRef.current);
+    } else {
+      const p = playerRef.current;
+      if (p && isRealTrack(track)) p.seekTo(0, true);
+      setCurrentTime(0);
+    }
+  }, [playlist, loadTrack, track]);
 
   const playPause = useCallback(() => {
     
@@ -189,8 +212,8 @@ export function usePlayerEngine() {
     }
   }, [playbackState, apiReady]);
 
-  const next = useCallback(() => goRelative(1, true), [goRelative]);
-  const prev = useCallback(() => goRelative(-1, true), [goRelative]);
+  const next = useCallback(() => goNext(true), [goNext]);
+const prev = useCallback(() => goPrev(), [goPrev]);
 
   const seekToFraction = useCallback(
     (fraction: number) => {

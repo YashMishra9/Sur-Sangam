@@ -51,3 +51,29 @@ export function PauseIcon({ className }: IconProps) {
     </svg>
   );
 }
+
+export function InstagramIcon({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
+      <rect x="3.5" y="3.5" width="17" height="17" rx="5" stroke="currentColor" strokeWidth={1.6} />
+      <circle cx="12" cy="12" r="4.2" stroke="currentColor" strokeWidth={1.6} />
+      <circle cx="17.1" cy="6.9" r="1.1" fill="currentColor" />
+    </svg>
+  );
+}
+
+export function NetworkIcon({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
+      <circle cx="6" cy="7" r="2.4" stroke="currentColor" strokeWidth={1.6} />
+      <circle cx="18" cy="7" r="2.4" stroke="currentColor" strokeWidth={1.6} />
+      <circle cx="12" cy="18" r="2.4" stroke="currentColor" strokeWidth={1.6} />
+      <path
+        d="M8.1 8.2 10.2 15.6M15.9 8.2 13.8 15.6M8.3 7 15.7 7"
+        stroke="currentColor"
+        strokeWidth={1.4}
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
