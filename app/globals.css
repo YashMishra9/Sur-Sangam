@@ -1,0 +1,69 @@
+@import "tailwindcss";
+
+@theme {
+  /* ── Sur Sangam palette — pulled from the shop-front scene, not a
+     default AI palette: brick facade, evening sodium light, faded poster
+     ink, cassette-label parchment. ── */
+  --color-ink: #1a120b;
+  --color-parchment: #f2e4c9;
+  --color-terracotta: #b5502e;
+  --color-amber: #e8912d;
+  --color-amber-deep: #c96f1d;
+  --color-teal: #45646b;
+  --color-signal-red: #c1443d;
+
+  --font-display: "Rozha One", "Georgia", serif;
+  --font-body: "Inter", "Helvetica Neue", Arial, sans-serif;
+}
+
+html,
+body {
+  height: 100%;
+  background-color: var(--color-ink);
+  color: var(--color-parchment);
+  font-family: var(--font-body);
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.blink-colon {
+  animation: blink 1s step-end infinite;
+}
+
+.hero-bg {
+  background-image: url("/bg/scene-wide.png");
+  background-size: cover;
+  background-position: center;
+}
+
+@media (orientation: portrait) {
+  .hero-bg {
+    background-image: url("/bg/scene-tall.png");
+  }
+}
+
+.grain-overlay {
+  mix-blend-mode: overlay;
+  opacity: 0.3;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
