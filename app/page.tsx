@@ -1,31 +1,47 @@
 import { Clock } from "@/components/Clock";
 import { GrainOverlay } from "@/components/GrainOverlay";
-import { ListenerCount } from "@/components/ListenerCount";
 import { Player } from "@/components/Player";
 import { SocialLinks } from "@/components/SocialLinks";
 
 export default function Home() {
   return (
-    <main className="relative z-10 flex min-h-dvh flex-1 flex-col items-center justify-between overflow-hidden">
-      <div className="fixed inset-0 z-0" aria-hidden="true">
-        <div className="hero-bg absolute inset-0" />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-transparent to-black/80" />
-      </div>
+    <main className="relative isolate min-h-dvh overflow-hidden">
+
+      {/* Background */}
+      <div
+        className="hero-bg fixed inset-0 z-0"
+        aria-hidden="true"
+      />
+
+      {/* Dark overlay */}
+      <div
+        className="fixed inset-0 z-10 bg-gradient-to-b from-black/35 via-transparent to-black/80"
+        aria-hidden="true"
+      />
+
+      {/* Grain */}
       <GrainOverlay />
 
-      <div className="grid w-full grid-cols-3 items-start gap-2 pl-[max(1rem,env(safe-area-inset-left))] pr-[max(1rem,env(safe-area-inset-right))] pt-[max(1rem,env(safe-area-inset-top))]">
+      {/* TOP BAR — always stays at the top */}
+      <div
+        className="fixed inset-x-0 top-0 z-30 grid w-full grid-cols-3 items-start gap-2 px-[max(1rem,env(safe-area-inset-left))] pt-[max(1rem,env(safe-area-inset-top))] pr-[max(1rem,env(safe-area-inset-right))]"
+      >
         <div className="justify-self-start">
           <Clock />
         </div>
-        <div className="justify-self-center">
-          <ListenerCount />
-        </div>
+
+        <div aria-hidden="true" />
+
         <div className="justify-self-end">
           <SocialLinks />
         </div>
       </div>
 
-      <Player />
+      {/* PLAYER — stays at bottom */}
+      <div className="fixed inset-x-0 bottom-0 z-30 flex justify-center pb-[max(1rem,env(safe-area-inset-bottom))]">
+        <Player />
+      </div>
+
     </main>
   );
 }

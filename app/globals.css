@@ -1,9 +1,6 @@
 @import "tailwindcss";
 
 @theme {
-  /* ── Sur Sangam palette — pulled from the shop-front scene, not a
-     default AI palette: brick facade, evening sodium light, faded poster
-     ink, cassette-label parchment. ── */
   --color-ink: #1a120b;
   --color-parchment: #f2e4c9;
   --color-terracotta: #b5502e;
@@ -37,6 +34,20 @@ body {
   50% {
     opacity: 0;
   }
+}
+
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-row {
+  width: max-content;
+  animation: marquee-scroll 36s linear infinite;
 }
 
 .blink-colon {

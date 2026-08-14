@@ -1,8 +1,11 @@
 "use client";
 
 import { usePlayerEngine } from "@/lib/usePlayerEngine";
+import { CassetteTape } from "./CassetteTape";
 import { DeckCounter } from "./DeckCounter";
+import { MarqueeTicker } from "./MarqueeTicker";
 import { PlaylistTabs } from "./PlaylistTabs";
+import { RadioDisplay } from "./RadioDisplay";
 import { SeekBar } from "./SeekBar";
 import { Transport } from "./Transport";
 import { VinylSlot } from "./VinylSlot";
@@ -22,8 +25,14 @@ export function Player() {
         <PlaylistTabs playlists={playlists} activeId={playlist.id} onSelect={actions.selectPlaylist} />
       )}
 
+      <MarqueeTicker track={track} />
+
+      <div className="mb-2 flex items-center justify-center gap-2">
+        <CassetteTape isPlaying={isPlaying} />
+        <RadioDisplay isPlaying={isPlaying} />
+      </div>
+
       <div className="relative">
-        {/* ── DESKTOP: one horizontal pill ───────────────────────────── */}
         <div className={`hidden min-w-[440px] items-center gap-4 rounded-full p-3 pr-5 sm:flex ${GLASS}`}>
           <div className="h-20 w-20 shrink-0" aria-hidden="true" />
 
@@ -53,7 +62,6 @@ export function Player() {
           />
         </div>
 
-        {/* ── MOBILE: stacked card ───────────────────────────────────── */}
         <div className={`flex flex-col gap-3 rounded-[26px] p-4 sm:hidden ${GLASS}`}>
           <div className="flex items-center gap-3">
             <div className="h-16 w-16 shrink-0" aria-hidden="true" />
