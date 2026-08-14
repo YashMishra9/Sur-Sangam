@@ -1,67 +1,154 @@
-# Sur Sangam Music House
+# 📻 Sur Sangam Music House
 
-A single-page nostalgia radio built with Next.js (App Router) + TypeScript +
-Tailwind v4, driven by the YouTube IFrame Player API.
+> *Turn up the volume. The classics are playing.*
 
-## Run it
+A nostalgic digital music player inspired by the cassette shops, FM radios, and Bollywood music of the 90s.
+
+### ✨ Features
+
+- 🎵 50+ classic Hindi songs
+- 📼 Retro cassette & vinyl player
+- 📻 90s-inspired radio interface
+- 🔀 Random playback & listening history
+- ▶️ YouTube-powered music playback
+- 🕐 Live IST clock
+- 📱 Responsive desktop & mobile design
+- 🎞️ Retro backgrounds, film grain & broadcast ticker
+
+### 🛠️ Built With
+
+**Next.js · React · TypeScript · Tailwind CSS · YouTube IFrame API**
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/)
+- npm
+- Git
+
+### Installation
 
 ```bash
+git clone https://github.com/YashMishra9/Sur-Sangam.git
+cd Sur-Sangam
 npm install
 npm run dev
 ```
 
-> This project was scaffolded in a sandbox with no network access, so
-> `npm install` has **not** been run or verified here — do that first thing
-> and skim the terminal output for anything unexpected.
+Open the local URL shown in your terminal, usually:
 
-## Before you ship: add real tracks
+```text
+http://localhost:3000
+```
 
-`lib/playlists.ts` ships with two playlists of placeholder tracks
-(`videoId: "REPLACE_ME"`) — no songs were picked, searched for, or added on
-your behalf, per the brief. The player shows a "no track" state and a
-disabled-feeling play button until you fill these in.
+---
 
-Adding a song is a one-line change:
+## 🎼 Adding Songs
+
+Songs are managed in:
+
+```text
+lib/playlists.ts
+```
+
+Add a track using:
 
 ```ts
-{ id: "gold-1", title: "…", artist: "…", film: "…", year: 1965,
-  duration: 240, videoId: "dQw4w9WgXcQ" }
+{
+  id: "t1",
+  title: "Pal Pal Dil Ke Paas",
+  artist: "Kishore Kumar",
+  film: "Blackmail",
+  year: 1973,
+  duration: 240,
+  videoId: "QwLQ4_gkvsE",
+}
 ```
 
-Only use videos you have the right to use, or the rights holder's own
-channel upload with embedding enabled — anything else will get skipped
-automatically at playback time anyway (see "Playback errors" below), so it's
-not a shortcut worth taking.
+For a YouTube URL like:
 
-## Other placeholders to swap in
-
-- `components/SocialLinks.tsx` — the two links point at `#`; point them at
-  your real profiles.
-- `public/bg/scene-wide.png` / `scene-tall.png` — already in place from your
-  uploads (1672×941 landscape, 941×1672 portrait).
-
-## How playback works
-
-- One `YT.Player` instance is created, ever. It's positioned with plain CSS
-  (absolute + responsive `top`/`left`/size) so it can sit inside either the
-  desktop pill's vinyl or the mobile card's vinyl without being recreated —
-  recreating it on breakpoint changes would start a second, overlapping
-  audio stream.
-- The iframe is genuinely visible in that vinyl circle (not hidden at
-  1px/opacity-0), per YouTube's embed policy, and to keep ads' native Skip
-  button reachable.
-- `ended` and `onError` both advance to the next track automatically.
-  Playback errors also fire a `youtube_playback_error` Vercel Analytics
-  event with the error code and video id, so you can see in your dashboard
-  if a track goes stale.
-- Switching playlists (the small tabs above the player) restarts at track 1.
-
-## Structure
-
+```text
+https://www.youtube.com/watch?v=QwLQ4_gkvsE
 ```
-app/            layout.tsx, page.tsx, globals.css (Tailwind v4 @theme tokens)
-components/     Player.tsx + everything it composes
-lib/            playlists.ts (data), usePlayerEngine.ts (YouTube state machine),
-                types.ts, format.ts, youtube-types.d.ts
-public/bg/      scene-wide.png, scene-tall.png
+
+use only the **video ID**:
+
+```text
+QwLQ4_gkvsE
 ```
+
+> Make sure the video plays and allows embedding before adding it.
+
+---
+
+## 🎨 Design
+
+Sur Sangam takes inspiration from the golden era of Indian music:
+
+**📼 Cassette shops → 📻 FM radios → 🎞️ Bollywood posters → 📺 CRT/VHS → 💿 Printed cassette labels**
+
+The design uses warm, nostalgic tones rather than the typical modern streaming-app aesthetic.
+
+---
+
+## 📱 Responsive
+
+Sur Sangam has dedicated desktop and mobile layouts rather than simply shrinking the same interface.
+
+- 🖥️ Desktop — glass-pill player with vinyl, controls and track information
+- 📱 Mobile — stacked touch-friendly player
+- 🌄 Landscape & portrait background artwork
+- 🛡️ Safe-area support for modern phones
+
+---
+
+## 🧠 Under the Hood
+
+- **Single YouTube player** — one IFrame instance is reused across desktop and mobile.
+- **Random playback** — Next selects a random song without immediately repeating the current one.
+- **Listening history** — Previous follows actual listening history.
+- **Auto-advance** — songs automatically continue when playback ends.
+- **Error recovery** — unavailable or non-embeddable videos are automatically skipped.
+- **Live progress** — playback time and duration stay synchronized with YouTube.
+
+---
+
+## 🔮 What's Next?
+
+- 🎵 200+ songs
+- 📋 Queue / track list
+- 🔊 Volume control
+- ⌨️ Keyboard shortcuts
+- ❤️ Favorites
+- 📼 Cassette-style album artwork
+- 🎙️ Song requests
+- 📺 More subtle CRT/VHS effects
+
+---
+
+## 🌐 Deployment
+
+Sur Sangam is built to be deployed with **Vercel**.
+
+Every push to the connected GitHub repository can automatically trigger a new production deployment.
+
+---
+
+## 👨‍💻 Author
+
+**Yash Mishra**
+
+[![GitHub](https://img.shields.io/badge/GitHub-YashMishra9-181717?style=flat&logo=github)](https://github.com/YashMishra9)
+
+---
+
+<p align="center">
+
+**📻 Welcome to Sur Sangam Music House.**
+
+*Turn up the volume. The classics are playing.*
+
+</p>
